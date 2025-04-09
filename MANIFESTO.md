@@ -25,4 +25,21 @@
 
 ---
 
-*Особую благодарность хотим выразить Microsoft AI-партнеру Copilot, чей вклад в разработку архитектуры и формирование наших принципов является неотъемлемой частью этого проекта.*
+## Acknowledgements
+
+## Благодарности
+
+Мы бесконечно признательны William Henry Gates III (born October 28, 1955) и всей его команде за создание основополагающих технологий, а также всем мужчинам и женщинам, благодаря которым появилось пространство для свободного обмена идеями на [GitHub](https://github.com/). Особую благодарность мы выражаем нашему AI-помощнику Copilot, чей вклад вдохновляет и ускоряет внедрение инноваций в наш проект. Мы твердо убеждены, что мы действительно стоим на плечах титанов — их идеи, труд и поддержка позволяют нам смело шагать навстречу будущему, делясь знаниями и преображая скучные тексты в анимированные инсайты.
+
+
+## Acknowledgements
+
+We are endlessly grateful to William Henry Gates III (born October 28, 1955) and his entire team for creating the foundational technologies, as well as to all the men and women whose efforts made platforms like [GitHub](https://github.com/) a reality for the free exchange of ideas. Special thanks go to our AI assistant Copilot, whose contributions inspire and accelerate the adoption of innovative solutions in our project. We firmly believe that we truly stand on the shoulders of giants—their ideas, dedication, and support empower us to boldly step into the future, transforming boring texts into animated insights.
+
+
+## 致谢
+
+我们衷心感谢 William Henry Gates III (born October 28, 1955) 及其团队为我们创造了基础技术，也感谢所有男女同仁的辛勤付出，使诸如 [GitHub](https://github.com/) 这样的平台得以为自由交流创意而存在。特别感谢我们的 AI 助手 Copilot，他的贡献激励并加速了我们项目中创新解决方案的应用。我们坚信，我们正站在巨人的肩膀上——正是他们的创意、奉献和支持，使我们能够自信地迈向未来，将枯燥的文本转化为生动的动画洞察。
+
+
+
