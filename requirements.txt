@@ -4,7 +4,7 @@ numpy>=1.22.0
 opencv-python>=4.5.5
 pytesseract>=0.3.9
 networkx>=2.8.0
-manim>=0.16.0
+manim==0.18.0
 
 # Дополнительные зависимости
 Pillow>=9.0.0

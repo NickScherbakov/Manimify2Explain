@@ -45,7 +45,9 @@ def extract_text(pdf_path: str) -> str:
 
 def extract_images(pdf_path: str) -> List[Dict[str, Any]]:
     """
-    Извлекает все изображения из PDF-файла.
+    Извлекает все изображения из PDF-файла двумя способами:
+    1. Извлекает встроенные изображения через page.get_images()
+    2. Рендерит каждую страницу как растровое изображение
     
     Args:
         pdf_path (str): Путь к PDF-файлу.
@@ -56,37 +58,66 @@ def extract_images(pdf_path: str) -> List[Dict[str, Any]]:
             - 'image': bytes - само изображение в формате байтов
             - 'ext': str - расширение файла (например, 'jpeg', 'png')
             - 'page_num': int - номер страницы
+            - 'source': str - источник изображения ('embedded' или 'rendered')
     """
     try:
         # Открываем PDF-файл
         doc = fitz.open(pdf_path)
+        print(f"Открыт PDF-документ: {pdf_path}, страниц: {len(doc)}")
         
         # Список для хранения извлеченных изображений
         images_list = []
         
-        # Проходим по всем страницам
+        # СПОСОБ 1: Извлекаем встроенные изображения
         for page_num in range(len(doc)):
             page = doc.load_page(page_num)
             
             # Получаем список изображений на странице
             image_list = page.get_images(full=True)
+            print(f"Встроенных изображений на странице {page_num+1}: {len(image_list)}")
             
             # Обрабатываем каждое изображение
             for img_index, img in enumerate(image_list):
-                xref = img[0]  # получаем xref изображения
-                
-                # Извлекаем изображение
-                base_image = doc.extract_image(xref)
-                image_bytes = base_image["image"]
-                image_ext = base_image["ext"]
-                
-                # Добавляем информацию об изображении в список
-                images_list.append({
-                    'image': image_bytes,
-                    'ext': image_ext,
-                    'page_num': page_num,
-                    'index': img_index
-                })
+                try:
+                    xref = img[0]  # получаем xref изображения
+                    
+                    # Извлекаем изображение
+                    base_image = doc.extract_image(xref)
+                    image_bytes = base_image["image"]
+                    image_ext = base_image["ext"]
+                    
+                    # Добавляем информацию об изображении в список
+                    images_list.append({
+                        'image': image_bytes,
+                        'ext': image_ext,
+                        'page_num': page_num,
+                        'index': img_index,
+                        'source': 'embedded'
+                    })
+                except Exception as e:
+                    print(f"Ошибка при извлечении встроенного изображения: {e}")
+        
+        # СПОСОБ 2: Рендерим каждую страницу как изображение
+        for page_num in range(len(doc)):
+            page = doc.load_page(page_num)
+            print(f"Рендеринг страницы {page_num+1} как изображение...")
+            
+            # Рендерим страницу как pixmap (рисунок) с высоким разрешением
+            zoom_factor = 2.0  # Увеличиваем разрешение в 2 раза
+            matrix = fitz.Matrix(zoom_factor, zoom_factor)
+            pixmap = page.get_pixmap(matrix=matrix, alpha=False)
+            
+            # Преобразуем pixmap в bytes изображения (PNG)
+            img_bytes = pixmap.tobytes("png")
+            
+            # Добавляем информацию об изображении в список
+            images_list.append({
+                'image': img_bytes,
+                'ext': 'png',
+                'page_num': page_num,
+                'index': 0,  # Для рендеринга страницы индекс всегда 0
+                'source': 'rendered'
+            })
         
         # Закрываем документ
         doc.close()

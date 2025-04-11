@@ -89,12 +89,29 @@ def is_graph_image(image: Union[np.ndarray, bytes]) -> bool:
         bool: True, если найдена структура графа, иначе False.
     """
     try:
-        # Получаем граф из изображения
-        graph = extract_graph_structure(image)
+        # Если изображение в формате байтов, преобразуем его в numpy array
+        if isinstance(image, bytes):
+            image = np.asarray(bytearray(image), dtype=np.uint8)
+            image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+            
+        # Преобразуем изображение в оттенки серого
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         
-        # Если в графе есть узлы и ребра, считаем, что это изображение графа
-        return graph.number_of_nodes() > 2 and graph.number_of_edges() > 1
-    
+        # Применяем бинаризацию для выделения элементов графа
+        _, binary = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY_INV)
+        
+        # Находим контуры на изображении
+        contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        # Считаем как потенциальный граф, если найдено более 5 контуров
+        # Это более либеральное условие для обнаружения графов
+        significant_contours = [cnt for cnt in contours if cv2.contourArea(cnt) > 50]
+        
+        print(f"Найдено контуров: {len(significant_contours)}")
+        
+        # Более либеральное условие для признания изображения графом
+        return len(significant_contours) > 5
+        
     except Exception as e:
         print(f"Ошибка при определении графа на изображении: {e}")
         return False
